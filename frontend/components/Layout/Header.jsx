@@ -87,7 +87,7 @@ function Header({ activeHeading }) {
                       <Link to={`/product/${i._id}`}>
                         <div className="w-full flex items-start-py-3">
                           <img
-                            src={`${backend_url}${i.images && i.images[0]}`}
+                            src={`${i.images && i.images[0].url}`}
                             alt=""
                             className="w-[40px] h-[40px] mr-[10px]"
                           />
@@ -177,7 +177,7 @@ function Header({ activeHeading }) {
                 {isAuthenticated ? (
                   <Link to="/profile">
                     <img
-                      src={`${backend_url}${user.avatar}`}
+                      src={`${user?.avatar?.url}`}
                       className="w-[35px] h-[35px] rounded-full"
                       alt=""
                     />
@@ -305,7 +305,7 @@ function Header({ activeHeading }) {
                 {isAuthenticated ? (
                   <div>
                    <Link to="/profile">
-                     <img src={`${backend_url}${user.avatar}`} alt="" 
+                     <img src={`${user.avatar.url}`} alt="" 
                     className="w-[60px] h-[60px] rounded-full border-[3px] border-[#05dbad]"
                     />
                    </Link>

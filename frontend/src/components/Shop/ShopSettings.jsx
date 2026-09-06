@@ -68,7 +68,7 @@ const ShopSettings = () => {
               src={
                 avatar
                   ? URL.createObjectURL(avatar)
-                  : `${backend_url}${seller.avatar}`
+                  : `${seller.avatar.url}`
               }
               alt=""
               className="w-[200px] h-[200px] object-cover rounded-full cursor-pointer "

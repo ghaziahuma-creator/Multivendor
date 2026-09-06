@@ -6,7 +6,6 @@ import Loader from '../Layout/Loader'
 
 const Events = () => {
   const {allEvents, isLoading} = useSelector((state)=> state.events);
-
   return (
        <div>
       {isLoading ? (

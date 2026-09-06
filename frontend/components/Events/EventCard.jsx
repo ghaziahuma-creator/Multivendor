@@ -32,7 +32,7 @@ toast.success("Item added to cart successfully!");
     >
       <div className="w-full lg:w-[50%] m-auto">
         <img
-          src={`${backend_url}${data.images && data.images[0]}`}
+          src={`${data.images && data.images[0].url}`}
           alt=""
           className="w-full h-[300px] object-contain rounded-lg my-5"
         />

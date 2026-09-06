@@ -24,7 +24,7 @@ const ShopInfo = ({isOwner}) => {
                      setIsLoading(false);
                console.log(error);
        })
-      }, []);
+      }, [dispatch]);
 
 
      const logoutHandler = async() =>{
@@ -40,6 +40,7 @@ const ShopInfo = ({isOwner}) => {
 
     const averageRating = (totalRatings/totalReviewsLength).toFixed() || 0;
 
+
   return (
   
   <>
@@ -49,7 +50,7 @@ const ShopInfo = ({isOwner}) => {
        <div>
      <div className='w-full py-5'>
        <div className='w-full flex items-center justify-center'>
-           <img src={`${backend_url}${data.avatar}`} alt=""
+           <img src={`${data?.avatar?.url}`} alt=""
            className='w-[150px] h-[150px] object-cover rounded-full'
            />
        </div>

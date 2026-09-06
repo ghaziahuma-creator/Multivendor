@@ -17,6 +17,8 @@ const ProductCard = ({ data, isShop, isEvent }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
 
+ 
+
    useEffect(()=>{
    if( wishlist && wishlist.find((i)=> i._id === data._id)){
       setClick(true);
@@ -52,6 +54,7 @@ const ProductCard = ({ data, isShop, isEvent }) => {
       dispatch(removeFromWishlist(data))
        toast.success("Item removed from wishlist!")
   }
+
   
   return (
     <>
@@ -59,7 +62,7 @@ const ProductCard = ({ data, isShop, isEvent }) => {
         <div className="flex justify-end"></div>
         <Link to={`${isEvent=== true ?`/product/${id}?isEvent=true`:`/product/${data._id}`}`}>
           <img
-            src={`${backend_url}${data.images && data.images[0]}`}
+            src={`${data && data?.images[0]?.url}`}
             alt=""
             className="w-full h-[170px] object-contain  "
           />

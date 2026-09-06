@@ -1,4 +1,5 @@
 const express = require("express");
+const cloudinary = require("../utils/cloudinary");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Conversation = require("../model/conversation");
@@ -15,11 +16,12 @@ router.post(
     try {
       const messageData = req.body;
 
-      if (req.file) {
-        const filename = req.file.filename;
-        const fileUrl = path.join(filename);
-        messageData.images = fileUrl;
-      }
+     if (req.file) {
+  messageData.images = {
+    public_id: req.file.filename,
+    url: req.file.path,
+  };
+}
 
       messageData.conversationId = req.body.conversationId;
       messageData.sender = req.body.sender;

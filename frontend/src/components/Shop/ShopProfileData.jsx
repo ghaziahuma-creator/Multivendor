@@ -106,7 +106,7 @@ const ShopProfileData = ({ isOwner }) => {
           {allReviews &&  allReviews.length!== 0?(
               allReviews.map((item, index) => (
               <div className="w-full flex my-5">
-                <img src={`${backend_url}${item.user.avatar}`} 
+                <img src={`${item.user.avatar.url}`} 
                 alt=""
                 className="w-[50px] h-[50px] rounded-full"
                 />

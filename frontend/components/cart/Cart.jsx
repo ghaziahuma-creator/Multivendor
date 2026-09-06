@@ -101,12 +101,14 @@ const CartSingle = ({ data , quantityChangeHandler, removeFromCartHandler}) => {
     }
   };
 
+ 
+
   const decremant = (data) => {
     setValue(value === 1 ? 1 : value - 1);
     const updateCartData = { ...data, qty: value === 1 ? 1 : value - 1 };
     quantityChangeHandler(updateCartData)
   };
-
+ console.log(data.images[0].url)
   return (
     <div className="border-b p-4">
       <div className="w-full flex items-center">
@@ -126,7 +128,7 @@ const CartSingle = ({ data , quantityChangeHandler, removeFromCartHandler}) => {
           </div>
         </div>
         <img
-          src={`${backend_url}${data.images && data.images[0]}`}
+          src={`${data.images && data.images[0].url}`}
           alt=""
           className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />

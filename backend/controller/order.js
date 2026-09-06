@@ -100,9 +100,9 @@ router.put(
       }
 
       if (req.body.status === "Transfered to delivery partner") {
-        order.cart.forEach(async (o) => {
-          await updateOrder(o._id, o.qty);
-        });
+       for (const o of order.cart) {
+  await updateOrder(o._id, o.qty);
+}
       }
 
       order.status = req.body.status;
@@ -139,7 +139,7 @@ router.put(
            seller.availableBalance = amount;
         }
 
-        await seller.save();
+        await seller.save({ validateBeforeSave: false });
       }
 
     } catch (error) {

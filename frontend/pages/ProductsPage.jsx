@@ -11,12 +11,13 @@ const ProductsPage = () => {
     const [searchParams] = useSearchParams();
     const categoryData = searchParams.get("category");
       const {allProducts,isLoading} = useSelector((state) => state.products);
+      console.log(allProducts)
 
     const [data,setData]= useState([]);
 
     useEffect(() =>{
        if(categoryData === null){
-        const d= allProducts && allProducts.sort((a, b)=>a.sold_out-b.sold_out);
+        const d= allProducts && [...allProducts].sort((a, b)=>a.sold_out-b.sold_out);
         setData(d);
 
        }else{

@@ -1,4 +1,5 @@
 const express = require("express");
+const cloudinary = require("../utils/cloudinary");
 const path = require("path");
 const router = express.Router();
 const { upload } = require("../multer");
@@ -17,28 +18,20 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
     const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
 
-    if (userEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ messsage: "Error deleting file" });
-        }
-      });
+if (userEmail) {
+  await cloudinary.uploader.destroy(req.file.filename);
+  return next(new ErrorHandler("User already exists", 400));
+}
 
-      return next(new ErrorHandler("User already exists", 400));
-    }
-
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
-
-    const user = {
-      name: name,
-      email: email,
-      password: password,
-      avatar: fileUrl,
-    };
+const user = {
+  name: name,
+  email: email,
+  password: password,
+  avatar: {
+    public_id: req.file.filename,
+    url: req.file.path,
+  },
+};
 
     const activationToken = createActivationToken(user);
 
@@ -230,16 +223,17 @@ router.put(
   upload.single("image"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      console.log(req.user);
-      console.log(req.file);
       const existsUser = await User.findById(req.user.id);
-      const existAvatarPath = `uploads/${existsUser.avatar}`;
-      fs.unlinkSync(existAvatarPath);
 
-      const fileUrl = path.join(req.file.filename);
+      if (existsUser.avatar && existsUser.avatar.public_id) {
+        await cloudinary.uploader.destroy(existsUser.avatar.public_id);
+      }
 
       const user = await User.findByIdAndUpdate(req.user.id, {
-        avatar: fileUrl,
+        avatar: {
+          public_id: req.file.filename,
+          url: req.file.path,
+        },
       });
 
       res.status(201).json({

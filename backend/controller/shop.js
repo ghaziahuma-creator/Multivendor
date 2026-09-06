@@ -1,4 +1,5 @@
 const express = require("express");
+const cloudinary = require("../utils/cloudinary");
 const path = require("path");
 const router = express.Router();
 const fs = require("fs");
@@ -19,32 +20,23 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
     const { email } = req.body;
     const sellerEmail = await Shop.findOne({ email });
-    if (sellerEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ messsage: "Error deleting file" });
-        }
-      });
+  if (sellerEmail) {
+  await cloudinary.uploader.destroy(req.file.filename);
+  return next(new ErrorHandler("User already exists", 400));
+}
 
-      return next(new ErrorHandler("User already exists", 400));
-    }
-
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
-
-    const seller = {
-      name: req.body.name,
-      email: email,
-      password: req.body.password,
-      avatar: fileUrl,
-      address: req.body.address,
-      phoneNumber: req.body.phoneNumber,
-      zipCode: req.body.zipCode,
-    };
-
+const seller = {
+  name: req.body.name,
+  email: email,
+  password: req.body.password,
+  avatar: {
+    public_id: req.file.filename,
+    url: req.file.path,
+  },
+  address: req.body.address,
+  phoneNumber: req.body.phoneNumber,
+  zipCode: req.body.zipCode,
+};
     const activationToken = createActivationToken(seller);
 
     const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
@@ -215,18 +207,19 @@ router.put(
   upload.single("image"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      console.log(req.user);
-      console.log(req.file);
       const existsUser = await Shop.findById(req.seller._id);
-      const existAvatarPath = `uploads/${existsUser.avatar}`;
-      fs.unlinkSync(existAvatarPath);
 
-      const fileUrl = path.join(req.file.filename);
+      if (existsUser.avatar && existsUser.avatar.public_id) {
+        await cloudinary.uploader.destroy(existsUser.avatar.public_id);
+      }
 
       const seller = await Shop.findByIdAndUpdate(
         req.seller._id,
         {
-          avatar: fileUrl,
+          avatar: {
+            public_id: req.file.filename,
+            url: req.file.path,
+          },
         },
         { new: true },
       );

@@ -5,7 +5,6 @@ import ProductDetails from "../components/Products/ProductDetails";
 import { useParams, useSearchParams } from "react-router-dom";
 import SuggestedProduct from "../components/Products/SuggestedProduct";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../components/Layout/Loader";
 
 const ProductDetailsPage = () => {
   const { allProducts } = useSelector((state) => state.products);

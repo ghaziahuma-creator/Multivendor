@@ -1,5 +1,6 @@
 const express = require("express");
 const { upload } = require("../multer");
+const cloudinary = require("../utils/cloudinary");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
@@ -19,8 +20,11 @@ router.post(
       if (!shop) {
         return next(new ErrorHandler("Shop Id is invalid!", 400));
       } else {
-        const files = req.files;
-        const imageUrls = files.map((file) => `${file.filename}`);
+       const files = req.files;
+const imageUrls = files.map((file) => ({
+  public_id: file.filename,
+  url: file.path,
+}));
         const eventData = req.body;
         eventData.images = imageUrls;
         eventData.shop = shop;
@@ -65,16 +69,9 @@ router.delete(
 
       const eventData = await Event.findById(eventId);
 
-      eventData.images.forEach((imageUrl) => {
-        const filename = imageUrl;
-        const filePath = `uploads/${filename}`;
-
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
+     for (const image of eventData.images) {
+  await cloudinary.uploader.destroy(image.public_id);
+}
 
        const event = await Event.findByIdAndDelete(eventId);
 

@@ -91,7 +91,7 @@ const CartSingle = ({ data, removeFromWishlistHandler, addToCartHandler  }) => {
       <div className="w-full 800px:flex items-center">
         <RxCross1 onClick={() => removeFromWishlistHandler(data)} className="cursor-pointer 800px:mb-['unset'] 800px:ml-['unset'] mb-6 ml-2"/>
         <img
-        src={`${backend_url}${data && data.images[0]}`}
+        src={`${data && data.images[0].url}`}
         alt="" 
         className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
         />

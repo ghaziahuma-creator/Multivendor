@@ -1,4 +1,5 @@
 const express = require("express");
+const cloudinary = require("../utils/cloudinary");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors")
 const router = express.Router();
 const Product = require("../model/product");
@@ -17,8 +18,11 @@ router.post("/create-product", upload.array("images"), catchAsyncErrors(async(re
          if(!shop){
             return next(new ErrorHandler("Shop Id is invalid!",400));
          }else{
-            const files = req.files ;
-            const imageUrls = files.map((file)=> `${file.filename}`);
+            const files = req.files;
+const imageUrls = files.map((file) => ({
+  public_id: file.filename,
+  url: file.path,
+}));
             const productData = req.body;
             productData.images = imageUrls;
             productData.shop = shop;
@@ -57,17 +61,9 @@ router.delete("/delete-shop-product/:id" , isSeller , catchAsyncErrors(async(req
        console.log(productId);
        const productData = await Product.findById(productId);
    
-        productData.images.forEach((imageUrl)=>{
-            const filename= imageUrl;
-            const filePath= `uploads/${filename}`;
-
-            fs.unlink(filePath, (err)=>{
-                if(err){
-                    console.log(err)
-                }
-            })
-        })
-
+       for (const image of productData.images) {
+  await cloudinary.uploader.destroy(image.public_id);
+}
         const product = await Product.findByIdAndDelete(productId);
 
        if(!product){

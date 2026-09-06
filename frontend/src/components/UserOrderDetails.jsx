@@ -30,12 +30,11 @@ const UserOrderDetails = () => {
   }, [dispatch]);
 
   const data = orders && orders.find((item) => item._id == id);
-  console.log(data)
-  const shopId = data.cart[0].shopId;
+  const shopId = data && data.cart[0].shopId;
 
     const handleMessageSubmit = async() => {
       if (isAuthenticated) {
-        const groupTitle = data.shop._id + user._id;
+        const groupTitle = shopId + user._id;
         const userId = user._id;
         const sellerId = shopId;
         await axios
@@ -116,7 +115,7 @@ const UserOrderDetails = () => {
         data?.cart.map((item, index) => (
           <div className="w-full flex items-start mb-5">
             <img
-              src={`${backend_url}${item.images[0]}`}
+              src={`${item.images[0].url}`}
               alt=""
               className="w-[120px] h-[120px]"
             />
@@ -130,7 +129,7 @@ const UserOrderDetails = () => {
             {data?.status === "Delivered" && !item?.isReviewed && (
               <div
                 className={`${styles.button} text-[#fff]`}
-                onClick={() => setOpen(true) || setSelectedItem(item) || console.log(item)}
+                onClick={() => setOpen(true) || setSelectedItem(item)}
               >
                 Write a review
               </div>
@@ -156,7 +155,7 @@ const UserOrderDetails = () => {
             <br />
             <div className="w-full flex">
               <img
-                src={`${backend_url}${selectedItem?.images[0]}`}
+                src={`${selectedItem?.images[0].url}`}
                 alt=""
                 className="w-[80px] h-[80px]"
               />
