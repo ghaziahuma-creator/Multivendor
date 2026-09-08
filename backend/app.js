@@ -9,10 +9,12 @@ const errorMiddleware = require("./middleware/error");
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: [
+        "http://localhost:5173",
+        process.env.FRONTEND_URL
+    ],
     credentials: true
 }));
-app.use("/", express.static("uploads"));
 app.use(bodyParser.urlencoded({extended:true, limit:"50mb"}));
 
 //config
