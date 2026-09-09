@@ -99,7 +99,7 @@ const ProfileSideBar = ({active, setActive}) => {
          <div className='flex items-center cursor-pointer w-full mb-8'
         onClick={()=>setActive(8) }
         >
-           <GrUserAdmin size={20} color={active === 7 ? "red" : "" }/>
+           <GrUserAdmin size={20} color={active === 8 ? "red" : "" }/>
            <span className={`pl-3 ${active === 8 ? "text-[red]" : ""} 800px:block hidden`}>
             Admin dashboard
            </span>
@@ -111,7 +111,7 @@ const ProfileSideBar = ({active, setActive}) => {
         
 
         <div className='flex items-center cursor-pointer w-full mb-8'
-        onClick={()=>setActive(8)  || logoutHandler()}
+        onClick={()=>setActive(9)  || logoutHandler()}
         >
            <AiOutlineLogout size={20} color={active === 9 ? "red" : "" }/>
            <span className={`pl-3 ${active === 9 ? "text-[red]" : ""} 800px:block hidden`}>
