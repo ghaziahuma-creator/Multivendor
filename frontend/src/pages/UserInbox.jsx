@@ -285,7 +285,6 @@ const MessageList = ({
     getUser();
   }, [me, data]);
 
-  console.log(user.a)
   return (
     <div
       className={`w-full flex p-3 px-3 ${active === index ? " bg-gray-100" : "bg-transparent"} cursor-pointer`}
@@ -300,7 +299,7 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${user?.avatar.url}`}
+          src={`${user?.avatar?.url}`}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
@@ -339,7 +338,7 @@ const UserChatBox = ({
       <div className="w-full flex p-3 items-center justify-between bg-slate-200">
         <div className="flex">
           <img
-            src={`${userData?.avatar.url}`}
+            src={`${userData?.avatar?.url}`}
             alt=""
             className="w-[60px] h-[60px] rounded-full"
           />
@@ -363,7 +362,7 @@ const UserChatBox = ({
             >
               {item.sender !== userId && (
                 <img
-                  src={`${userData?.avatar.url}`}
+                  src={`${userData?.avatar?.url}`}
                   alt=""
                   className="w-[40px] h-[40px] rounded-full mr-3"
                 />
